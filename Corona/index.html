@@ -1,21 +1,29 @@
+
 <!DOCTYPE html>
 <html>
     <head>
+      <link rel="stylesheet" href="css.css">
         <style>
             #mycanvas{
                 border: 5px solid red;
                 background-image: url("Assets/back.jpeg");
-                clear left;
-            } 
-            .move{
-                margin-top: 50px;
             }
+            #move{
+              height: 40px;
+              width: 100px;
+              margin-left: 100px;
+              margin-top: 10px;
+          }
+
         </style>
         <title>CORONA FIGHTER</title>
          <body>
             <h1>TAKE WARRIOR TO OUR CURE GEM</h1>
              <canvas id="mycanvas"></canvas>
-             <button class="move">MOVE</button>
+             <div class="move">
+              <button id="move">MOVE</button>
+             </div>
+
              <script src="game.js"></script>
          </body>
     </head>
