@@ -10,8 +10,12 @@ function load_images(){
 
 }
 function init(){
-canvas=document.getElementById("mycanvas")
+canvas=document.getElementById("mycanvas");
+buttonm=document.getElementById("mve");
+buttons=document.getElementById("stp");
 pen=canvas.getContext('2d');
+score = 0;
+game_over = false
 W=700
 H=400
 canvas.width= W
@@ -52,6 +56,13 @@ gem = {
     w : 60,
     h : 60,
 }
+ buttonm.addEventListener("click",function(){
+     player.moving=true;
+ })
+ buttons.addEventListener("click",function(){
+    player.moving=false;
+
+})
 }
 function draw(){
     pen.clearRect(0,0,W,H);
@@ -60,23 +71,55 @@ function draw(){
     for(let i=0;i<enemy.length;i++){
         pen.drawImage(virus_image,enemy[i].x,enemy[i].y,enemy[i].w,enemy[i].h); 
     }
-     
+    pen.fillStyle = "white";
+	pen.fillText("Score " + score,10,10);
+}
+
+function isColliding(b1,b2){
+	
+	if(Math.abs(b1.x - b2.x)<=30 && Math.abs(b1.y-b2.y)<=30){
+		return true;
+	}
+	return false;
 }
 
 function update(){
-    
+    if(player.moving==true){
+        player.x=player.x+player.speed;
+        score += 20;
+    }
     for(let i=0;i<enemy.length;i++){
-        enemy[i].y=enemy[i].y+enemy[i].speed;
-        if(enemy[i].y>H-enemy[i].h || enemy[i].y<0){
-            enemy[i].speed=enemy[i].speed*(-1);
-        }
-    } 
+		if(isColliding(enemy[i],player)){
+			score -= i*100;
+			if(score<0){
+				game_over = true;
+				alert("Game Over");
+			}
+
+		}
+	}
+    if(isColliding(gem,player)){
+		game_over = true;
+		draw();
+		alert("You score " +score);
+    }
+    for(let i=0;i<enemy.length;i++){
+		enemy[i].y += enemy[i].speed;
+		if(enemy[i].y >H - enemy[i].h || enemy[i].y<0 ){
+			enemy[i].speed =enemy[i].speed *(-1);
+		}
+	}
+	
 }
 
+
 function gameloop(){
+    if(game_over==true){
+		clearInterval(f);
+	}
     draw();
     update();
 }
 load_images();
 init();
-setInterval(gameloop,100);
+const f=setInterval(gameloop,100);
